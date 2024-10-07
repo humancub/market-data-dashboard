@@ -1,0 +1,26 @@
+<div class="wrapper_assets">
+<mat-form-field>
+  <mat-label>Select Asset</mat-label> 
+   <mat-select > 
+    <mat-option *ngFor="let provider of providers" [value]="provider">
+      {{ provider }}
+    </mat-option>
+  </mat-select> 
+ </mat-form-field>
+
+ <button mat-flat-button>Subscribe</button>
+</div>
+
+<mat-card>
+  <mat-card-content>
+    <p>Symbol</p>
+    <p>Price</p>
+    <p>Time</p>
+  </mat-card-content>
+    
+  </mat-card>
+  
+  
+  
+  <canvas id="canvas-id"></canvas>
+
