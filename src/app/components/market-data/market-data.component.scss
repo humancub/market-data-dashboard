@@ -1,0 +1,38 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.wrapper_assets {
+  display: flex;
+  justify-content: space-around;
+}
+
+.provider-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.small-button {
+  font-size: 12px;
+  padding: 4px 8px;
+  min-width: auto;
+  border-radius: 4px;
+}
+
+.data-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 20px;
+}
+
+.period-select {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
