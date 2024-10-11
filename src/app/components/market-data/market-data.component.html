@@ -1,26 +1,87 @@
-<div class="wrapper_assets">
-<mat-form-field>
-  <mat-label>Select Asset</mat-label> 
-   <mat-select > 
-    <mat-option *ngFor="let provider of providers" [value]="provider">
-      {{ provider }}
-    </mat-option>
-  </mat-select> 
- </mat-form-field>
+<div class="wrapper">
+  <div class="wrapper_assets">
+    <mat-form-field>
+      <mat-label>Select Asset</mat-label>
+      <mat-select>
+        <div class="provider-buttons">
+          <button
+            mat-flat-button
+            class="small-button"
+            *ngFor="let provider of providers"
+            (click)="fetchInstruments(provider)"
+          >
+            {{ provider }}
+          </button>
+        </div>
 
- <button mat-flat-button>Subscribe</button>
-</div>
+        <mat-option *ngIf="instruments.length === 0" disabled
+          >No instruments available</mat-option
+        >
+        <mat-option
+          *ngFor="let instrument of instruments"
+          [value]="instrument"
+          (click)="onInstrumentSelect(instrument)"
+        >
+          {{ instrument.symbol }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-<mat-card>
-  <mat-card-content>
-    <p>Symbol</p>
-    <p>Price</p>
-    <p>Time</p>
-  </mat-card-content>
-    
+    <button
+      mat-flat-button
+      (click)="subscribe()"
+      [disabled]="isSubscribeDisabled"
+    >
+      Subscribe
+    </button>
+  </div>
+
+  <mat-card class="custom-card">
+    <mat-card-content>
+      <div class="data-container">
+        <div class="data-item">
+          <p class="label">Symbol:</p>
+          <p class="value">{{ selectedInstrumentSymbol || "N/A" }}</p>
+        </div>
+        <div class="data-item">
+          <p class="label">Price:</p>
+          <p class="value">
+            {{
+              currentRealTimeData.ask?.price ||
+                currentRealTimeData.bid?.price ||
+                currentRealTimeData.last?.price ||
+                "N/A"
+            }}
+          </p>
+        </div>
+        <div class="data-item">
+          <p class="label">Time:</p>
+          <p class="value">
+            {{
+              currentRealTimeData.ask?.timestamp
+                | date : "MMM d, h:mm a" || currentRealTimeData.bid?.timestamp
+                | date : "MMM d, h:mm a" || currentRealTimeData.last?.timestamp
+                | date : "MMM d, h:mm a" || "N/A"
+            }}
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
   </mat-card>
-  
-  
-  
-  <canvas id="canvas-id"></canvas>
 
+  <div *ngIf="chart" class="period-select">
+    <mat-form-field appearance="fill">
+      <mat-label>Choose period</mat-label>
+      <mat-select
+        [(value)]="selectedPeriod"
+        (selectionChange)="fetchDateRangeChartWithPeriod()"
+      >
+        <mat-option *ngFor="let period of periods" [value]="period.value">
+          {{ period.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <canvas id="myChart" width="300" height="100"></canvas>
+</div>
