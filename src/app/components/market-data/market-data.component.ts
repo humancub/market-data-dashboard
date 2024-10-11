@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WebSocketService } from '../../services/web-socket.service';
 import { AuthService } from '../../services/auth.service';
@@ -16,6 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [MaterialModule, CommonModule],
   templateUrl: './market-data.component.html',
   styleUrls: ['./market-data.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarketDataComponent implements OnInit, OnDestroy {
   private websocketSubscription!: Subscription;
@@ -52,7 +53,8 @@ export class MarketDataComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private tokenStorage: TokenStorageService,
     private chartService: ChartService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cd: ChangeDetectorRef
   ) {
     Chart.register(...registerables);
   }
@@ -90,6 +92,8 @@ export class MarketDataComponent implements OnInit, OnDestroy {
     this.currentRealTimeData.ask = data.ask ?? this.currentRealTimeData.ask;
     this.currentRealTimeData.bid = data.bid ?? this.currentRealTimeData.bid;
     this.currentRealTimeData.last = data.last ?? this.currentRealTimeData.last;
+
+    this.cd.markForCheck(); 
   }
 
   private showNoDataSnackbar() {
@@ -188,6 +192,8 @@ export class MarketDataComponent implements OnInit, OnDestroy {
         },
       },
     });
+
+    this.cd.markForCheck(); 
   }
 
   formatChartDate(date: Date): string {
